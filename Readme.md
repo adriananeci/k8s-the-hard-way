@@ -5,7 +5,7 @@ These money should be enough to get accommodated with main k8s components
 
 ## Quick setup
 ```
-./depoly.all
+./deploy.all
 ```
 
 ## Quick view

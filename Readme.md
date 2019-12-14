@@ -5,7 +5,7 @@ These money should be enough to get accommodated with main k8s components
 
 ## Quick setup
 ```
-./deploy.all
+./deploy_all.sh
 ```
 
 ## Quick view

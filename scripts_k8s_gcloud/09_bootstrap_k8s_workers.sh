@@ -4,11 +4,11 @@
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/common_library.sh
 
 gcp_ssh_multiple worker-0,worker-1,worker-2 '''
-sudo apt-get update
-sudo apt-get -y install socat conntrack ipset
+sudo apt-get -qq update
+sudo apt-get -y -qq install socat conntrack ipset
 sudo swapoff -a
 
-wget -q --show-progress --https-only --timestamping \
+wget -q --https-only --timestamping \
   https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.16.1/crictl-v1.16.1-linux-amd64.tar.gz \
   https://github.com/opencontainers/runc/releases/download/v1.0.0-rc9/runc.amd64 \
   https://github.com/containernetworking/plugins/releases/download/v0.8.3/cni-plugins-linux-amd64-v0.8.3.tgz \
@@ -37,7 +37,7 @@ mkdir containerd
 POD_CIDR=$(curl -s -H "Metadata-Flavor: Google" \
     http://metadata.google.internal/computeMetadata/v1/instance/attributes/pod-cidr)
 
-cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
+cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf >/dev/null
 {
     "cniVersion": "0.3.1",
     "name": "bridge",
@@ -55,7 +55,7 @@ cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
 }
 EOF
 
-cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf >/dev/null
 {
     "cniVersion": "0.3.1",
     "name": "lo",
@@ -63,7 +63,7 @@ cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
 }
 EOF
 
-cat << EOF | sudo tee /etc/containerd/config.toml
+cat << EOF | sudo tee /etc/containerd/config.toml >/dev/null
 [plugins]
   [plugins.cri.containerd]
     snapshotter = "overlayfs"
@@ -73,7 +73,7 @@ cat << EOF | sudo tee /etc/containerd/config.toml
       runtime_root = ""
 EOF
 
-cat <<EOF | sudo tee /etc/systemd/system/containerd.service
+cat <<EOF | sudo tee /etc/systemd/system/containerd.service >/dev/null
 [Unit]
 Description=containerd container runtime
 Documentation=https://containerd.io
@@ -99,7 +99,7 @@ sudo mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
 sudo mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
 sudo mv ca.pem /var/lib/kubernetes/
 
-cat <<EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml
+cat <<EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml >/dev/null
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
 authentication:
@@ -121,7 +121,7 @@ tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
 tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
 EOF
 
-cat <<EOF | sudo tee /etc/systemd/system/kubelet.service
+cat <<EOF | sudo tee /etc/systemd/system/kubelet.service >/dev/null
 [Unit]
 Description=Kubernetes Kubelet
 Documentation=https://github.com/kubernetes/kubernetes
@@ -147,7 +147,7 @@ EOF
 
 sudo mv kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
 
-cat <<EOF | sudo tee /var/lib/kube-proxy/kube-proxy-config.yaml
+cat <<EOF | sudo tee /var/lib/kube-proxy/kube-proxy-config.yaml >/dev/null
 kind: KubeProxyConfiguration
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
@@ -156,7 +156,7 @@ mode: "iptables"
 clusterCIDR: "10.200.0.0/16"
 EOF
 
-cat <<EOF | sudo tee /etc/systemd/system/kube-proxy.service
+cat <<EOF | sudo tee /etc/systemd/system/kube-proxy.service >/dev/null
 [Unit]
 Description=Kubernetes Kube Proxy
 Documentation=https://github.com/kubernetes/kubernetes

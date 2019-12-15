@@ -5,7 +5,7 @@
 
 gcp_ssh_multiple controller-0,controller-1,controller-2 '''
 sudo mkdir -p /etc/kubernetes/config
-wget -q --show-progress --https-only --timestamping \
+wget -q --https-only --timestamping \
   "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kube-apiserver" \
   "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kube-controller-manager" \
   "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kube-scheduler" \
@@ -17,10 +17,11 @@ sudo mkdir -p /var/lib/kubernetes/
 sudo mv ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem \
   service-account-key.pem service-account.pem \
   encryption-config.yaml /var/lib/kubernetes/
+
 INTERNAL_IP=$(curl -s -H "Metadata-Flavor: Google" \
   http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip)
 
-cat <<EOF | sudo tee /etc/systemd/system/kube-apiserver.service
+cat <<EOF | sudo tee /etc/systemd/system/kube-apiserver.service >/dev/null
 [Unit]
 Description=Kubernetes API Server
 Documentation=https://github.com/kubernetes/kubernetes
@@ -71,7 +72,7 @@ EOF
 
 sudo mv kube-controller-manager.kubeconfig /var/lib/kubernetes/
 
-cat <<EOF | sudo tee /etc/systemd/system/kube-controller-manager.service
+cat <<EOF | sudo tee /etc/systemd/system/kube-controller-manager.service >/dev/null
 [Unit]
 Description=Kubernetes Controller Manager
 Documentation=https://github.com/kubernetes/kubernetes
@@ -99,7 +100,7 @@ EOF
 
 sudo mv kube-scheduler.kubeconfig /var/lib/kubernetes/
 
-cat <<EOF | sudo tee /etc/kubernetes/config/kube-scheduler.yaml
+cat <<EOF | sudo tee /etc/kubernetes/config/kube-scheduler.yaml >/dev/null
 apiVersion: kubescheduler.config.k8s.io/v1alpha1
 kind: KubeSchedulerConfiguration
 clientConnection:
@@ -108,7 +109,7 @@ leaderElection:
   leaderElect: true
 EOF
 
-cat <<EOF | sudo tee /etc/systemd/system/kube-scheduler.service
+cat <<EOF | sudo tee /etc/systemd/system/kube-scheduler.service >/dev/null
 [Unit]
 Description=Kubernetes Scheduler
 Documentation=https://github.com/kubernetes/kubernetes
@@ -128,8 +129,8 @@ sudo systemctl daemon-reload
 sudo systemctl enable kube-apiserver kube-controller-manager kube-scheduler
 sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
 
-sudo apt-get update
-sudo apt-get install -y nginx
+sudo apt-get -qq update
+sudo apt-get -qq install -y nginx
 
 cat > kubernetes.default.svc.cluster.local <<EOF
 server {

@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 # include common library
-. $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/common_library.sh
+#. $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/common_library.sh
 
-gcp_ssh_multiple worker-0,worker-1,worker-2 '''
+for instance in worker-0 worker-1; do
+    vagrant ssh  ${instance} -c '''
 sudo apt-get -qq update
 sudo apt-get -y -qq install socat conntrack ipset
 sudo swapoff -a
@@ -23,7 +24,8 @@ sudo mkdir -p \
   /var/lib/kubelet \
   /var/lib/kube-proxy \
   /var/lib/kubernetes \
-  /var/run/kubernetes
+  /var/run/kubernetes \
+  /etc/containerd
 
 mkdir containerd
   tar -xvf crictl-v1.16.1-linux-amd64.tar.gz
@@ -34,8 +36,7 @@ mkdir containerd
   sudo mv crictl kubectl kube-proxy kubelet runc /usr/local/bin/
   sudo mv containerd/bin/* /bin/
 
-POD_CIDR=$(curl -s -H "Metadata-Flavor: Google" \
-    http://metadata.google.internal/computeMetadata/v1/instance/attributes/pod-cidr)
+POD_CIDR=$(cat /home/vagrant/pod-cidr)
 
 cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf >/dev/null
 {
@@ -95,9 +96,9 @@ LimitCORE=infinity
 WantedBy=multi-user.target
 EOF
 
-sudo mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
-sudo mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
-sudo mv ca.pem /var/lib/kubernetes/
+sudo cp /vagrant/certs/${HOSTNAME}-key.pem /vagrant/certs/${HOSTNAME}.pem /var/lib/kubelet/
+sudo cp /vagrant/kubeconfigs/${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
+sudo cp /vagrant/certs/ca.pem /var/lib/kubernetes/
 
 cat <<EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml >/dev/null
 kind: KubeletConfiguration
@@ -145,7 +146,7 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
-sudo mv kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
+sudo cp /vagrant/kubeconfigs/kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
 
 cat <<EOF | sudo tee /var/lib/kube-proxy/kube-proxy-config.yaml >/dev/null
 kind: KubeProxyConfiguration
@@ -163,7 +164,8 @@ Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
 ExecStart=/usr/local/bin/kube-proxy \\
-  --config=/var/lib/kube-proxy/kube-proxy-config.yaml
+  --config=/var/lib/kube-proxy/kube-proxy-config.yaml \\
+  --masquerade-all
 Restart=on-failure
 RestartSec=5
 
@@ -175,5 +177,6 @@ sudo systemctl daemon-reload
 sudo systemctl enable containerd kubelet kube-proxy
 sudo systemctl start containerd kubelet kube-proxy
 '''
+done
 
-gcp_ssh controller-0 "kubectl get nodes --kubeconfig admin.kubeconfig"
+vagrant ssh master -c "kubectl get nodes --kubeconfig /vagrant/kubeconfigs/admin.kubeconfig"

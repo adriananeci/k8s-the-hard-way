@@ -1,0 +1,46 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+BOX_IMAGE="ubuntu/bionic64"
+BOX_VERSION="v20191218.0.0"
+required_plugins = %w(vagrant-vbguest vagrant-share vagrant-scp)
+
+required_plugins.each do |plugin|
+  system "vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
+end
+
+cluster = {
+    "worker-0" => { :ip => "10.240.0.20", :cpus => 2, :mem => 1024 },
+    "worker-1" => { :ip => "10.240.0.21", :cpus => 2, :mem => 1024 },
+    "master" => { :ip => "10.240.0.10", :cpus => 4, :mem => 2048 },
+}
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  cluster.each_with_index do |(hostname, info), index|
+    config.vm.define hostname do |cfg|
+      cfg.vm.provider :virtualbox do |vb, override|
+        config.vm.box = BOX_IMAGE
+        #config.vm.box_version = BOX_VERSION
+        override.vm.network :private_network, ip: "#{info[:ip]}"
+        override.vm.hostname = hostname
+
+        if hostname.include? "worker"
+          override.vm.provision :shell, :inline => "echo '10.200.#{index}.0/24' > /home/vagrant/pod-cidr"
+        end
+
+        vb.name = hostname
+        vb.customize [
+                         "modifyvm", :id,
+                         "--memory", info[:mem],
+                         "--cpus", info[:cpus],
+                         "--hwvirtex", "on",
+                         "--uartmode1", "disconnected",
+                         # "--nested-hw-virt", "on",
+                         "--ioapic", "on"
+                     ]
+      end # end provider
+    end # end config
+  end # end cluster
+end

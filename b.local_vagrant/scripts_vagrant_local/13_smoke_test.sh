@@ -5,8 +5,7 @@ kubectl config set-context --current --namespace default
 kubectl create secret generic kubernetes-the-hard-way \
   --from-literal="mykey=mydata"
 
-gcloud compute ssh controller-0 \
-  --command "sudo ETCDCTL_API=3 etcdctl get \
+vagrant ssh master -c "sudo ETCDCTL_API=3 etcdctl get \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/etcd/ca.pem \
   --cert=/etc/etcd/kubernetes.pem \
@@ -30,16 +29,11 @@ kubectl expose deployment nginx --port 80 --type NodePort
 NODE_PORT=$(kubectl get svc nginx \
   --output=jsonpath='{range .spec.ports[0]}{.nodePort}')
 
-gcloud compute firewall-rules create kubernetes-the-hard-way-allow-nginx-service \
-  --allow=tcp:${NODE_PORT} \
-  --network kubernetes-the-hard-way
+INTERNAL_IP=$(vagrant ssh worker-0 -c "ip address show | grep 'inet 10.240' | sed -e 's/^.*inet //' -e 's/\/.*$//' | tr -d '\n'" 2>/dev/null)
 
-EXTERNAL_IP=$(gcloud compute instances describe worker-0 \
-  --format 'value(networkInterfaces[0].accessConfigs[0].natIP)')
+curl -I http://${INTERNAL_IP}:${NODE_PORT}
 
-curl -I http://${EXTERNAL_IP}:${NODE_PORT}
-
-cd .. && kubectl apply -R -f k8s_resources/
+cd .. && kubectl apply -R -f ../k8s_resources/
 
 kubectl get componentstatuses
 kubectl get nodes

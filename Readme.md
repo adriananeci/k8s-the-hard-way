@@ -73,5 +73,104 @@ k get quota --all-namespaces (ResourceQuota)
 k get hpa --all-namespaces (HorizontalPodAutoscaler)
 k get netpol --all-namespaces (NetworkPolicy)
 ```
+
+### ServiceAccount
+```
+k create ns test
+kns test
+k create serviceaccount test
+k create role test-role --verb=get --verb=list --resource=services
+k create rolebinding test-rb --role=test-role --serviceaccount=test:test
+
+k run test --image=ubuntu --serviceaccount=test -it -- bash
+curl -k https://10.32.0.1/api/v1/namespaces/test/services -H 'Accept: application/json' -H "Authorization: Bearer $(cat /run/secrets/kubernetes.io/serviceaccount/token)" --works
+curl -k https://10.32.0.1/api/v1/namespaces/test/pods -H 'Accept: application/json' -H "Authorization: Bearer $(cat /run/secrets/kubernetes.io/serviceaccount/tokn)" --forbidden
+
+k delete deploy test
+```
+
+### Tips & Tricks
+
+* List all Persistent Volumes sorted by their name
+```
+kubectl get pv | grep -v NAME | sort -k 2 -rh
+```
+* Find which pod is taking max CPU
+```
+kubectl top pod
+```
+* Getting a Detailed Snapshot of the Cluster State
+```
+kubectl cluster-info dump --all-namespaces > cluster-state
+```
+* Save the manifest of a running pod
+```
+kubectl get pod name -o yaml --export > pod.yml
+```
+* Save the manifest of a running deployment
+```
+kubectl get deploy name -o yaml --export > deploy.yml
+```
+* Use dry-run to create a manifest for a deployment
+```
+kubectl run ghost --image=ghost --restart=Always --expose --port=80 --output=yaml --dry-run > ghost.yaml
+k apply -f ghost.yaml
+k get all
+```
+Delete evicted pods
+```
+kubectl get po -A -o json | \
+jq  '.items[] | select(.status.reason!=null) | select(.status.reason | contains("Evicted")) | \
+"kubectl delete po \(.metadata.name) -n \(.metadata.namespace)"' | xargs -n 1 bash -c
+```
+* Find all deployments which have no resource limits set
+```
+kubectl get deploy -o json | \
+jq ".items[] | select(.spec.template.spec.containers[].resources.limits==null) | {DeploymentName:.metadata.name}"
+```
+* Create a yaml for a job
+```
+kubectl run --generator=job/v1 test --image=nginx --dry-run -o yaml
+```
+* Find all pods in the cluster which are not running
+```
+kubectl get pod --all-namespaces  -o json | jq  '.items[] | select(.status.phase!="Running") | [ .metadata.namespace,.metadata.name,.status.phase ] | join(":")'
+```
+* List the top 3 nodes with the highest CPU usage
+```
+kubectl top nodes | sort --reverse --numeric -k 3 | head -n3
+```
+* List the top 3 nodes with the highest MEM usage
+```
+kubectl top nodes | sort --reverse --numeric -k 5 | head -n3
+```
+* Get rolling Update details for deployments
+```
+kubectl get deploy -o json |
+ jq ".items[] | {name:.metadata.name} + .spec.strategy.rollingUpdate"
+```
+* List pods and its corresponding containers
+```
+kubectl get pods -o='custom-columns=PODS:.metadata.name,CONTAINERS:.spec.containers[*].name'
+```
+* Get quota for each node:
+```
+kubectl get nodes --no-headers | awk '{print $1}' | xargs -I {} sh -c 'echo {}; kubectl describe node {} | grep Allocated -A 5 | grep -ve Event -ve Allocated -ve percent -ve -- ; echo'
+```
+* Get nodes which have no taints
+```
+kubectl get nodes -o json | jq  -r '.items[] | select(.spec.taints == null) | "\(.metadata.name)"'
+```
+
+### Other useful links
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+
+https://matthewdavis.io/kubectl-most-useful-commands-a-growing-list/
+https://github.com/dennyzhang/cheatsheet-kubernetes-A4
+http://kubernetesbyexample.com/
+
+http://crunchtools.com/competition-heats-up-between-cri-o-and-containerd-actually-thats-not-a-thing/
+https://itnext.io/benchmark-results-of-kubernetes-network-plugins-cni-over-10gbit-s-network-updated-april-2019-4a9886efe9c4
+
 ### TODO - add more options to deploy k8s (maybe aws, vagrant or bare-metal)
 

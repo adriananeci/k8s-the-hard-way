@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-parfum
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: parfum
+  namespace: kube-parfum
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+      nodePort: 32001
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: https
+      nodePort: 32002
+  selector:
+    run: parfum
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: parfum
+  name: parfum
+  namespace: kube-parfum
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: parfum
+  template:
+    metadata:
+      labels:
+        run: parfum
+    spec:
+      containers:
+      - image: nginx
+        name: test
+        ports:
+        - containerPort: 80 
+          name: http
+        - containerPort: 443
+          name: https

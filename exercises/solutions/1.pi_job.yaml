@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: pi
+spec:
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - image: bash
+        command: ["bash"]
+        args: [ "-c", "echo 'scale=1000; 4*a(1)' | bc -l" ]
+        name: pi
+        resources: {}
+      restartPolicy: Never

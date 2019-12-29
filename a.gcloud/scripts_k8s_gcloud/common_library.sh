@@ -35,7 +35,7 @@ gcp_scp()
 {
     instance=${1}
     shift
-    gcloud compute scp ${@} ${instance}:~/
+    gcloud compute scp ${@} ${instance}:.
 }
 
 

@@ -1,37 +1,74 @@
 #!/usr/bin/env bash
 
 vagrant ssh master -c '''
+echo \"#!/bin/bash
+# add containers subnets in route table
 sudo ip route add 10.200.0.0/24 via 10.240.0.20
 sudo ip route add 10.200.1.0/24 via 10.240.0.21
+# add services IP subnet in route table
+sudo ip route add 10.32.0.0/24 via 10.240.0.20
+\" | tee add_routes.sh
+chmod +x add_routes.sh
+./add_routes.sh
 
-echo "
-up route add -net 10.200.0.0/24 10.240.0.20
-up route add -net 10.200.1.0/24 10.240.0.21
-" | sudo tee --append /etc/network/interfaces
+#write out current crontab
+crontab -l > mycron
+#echo new cron into cron file
+echo \"@reboot ~/add_routes.sh\" >> mycron
+#install new cron file
+crontab mycron
+rm mycron
 
-echo "
+echo \"
 10.240.0.20 worker-0
 10.240.0.21 worker-1
 10.240.0.10 master
-" | sudo tee --append /etc/hosts
+\" | sudo tee --append /etc/hosts
 '''
 
 vagrant ssh worker-0 -c '''
+echo \"#!/bin/bash
 sudo ip route add 10.200.1.0/24 via 10.240.0.21
-echo "up route add -net 10.200.1.0/24 10.240.0.21" | sudo tee --append /etc/network/interfaces
-echo "
+\" | tee add_routes.sh
+
+chmod +x add_routes.sh
+./add_routes.sh
+
+#write out current crontab
+crontab -l > mycron
+#echo new cron into cron file
+echo \"@reboot ~/add_routes.sh\" >> mycron
+#install new cron file
+crontab mycron
+rm mycron
+
+echo \"
 10.240.0.20 worker-0
 10.240.0.21 worker-1
 10.240.0.10 master
-" | sudo tee --append /etc/hosts
+\" | sudo tee --append /etc/hosts
 '''
 
 vagrant ssh worker-1 -c '''
+echo \"
+#!/bin/bash
 sudo ip route add 10.200.0.0/24 via 10.240.0.20
-echo "up route add -net 10.200.0.0/24 10.240.0.20" | sudo tee --append /etc/network/interfaces
-echo "
+\" | tee add_routes.sh
+
+chmod +x add_routes.sh
+./add_routes.sh
+
+#write out current crontab
+crontab -l > mycron
+#echo new cron into cron file
+echo \"@reboot ~/add_routes.sh\" >> mycron
+#install new cron file
+crontab mycron
+rm mycron
+
+echo \"
 10.240.0.20 worker-0
 10.240.0.21 worker-1
 10.240.0.10 master
-" | sudo tee --append /etc/hosts
+\" | sudo tee --append /etc/hosts
 '''

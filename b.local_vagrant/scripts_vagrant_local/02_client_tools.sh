@@ -1,20 +1,30 @@
 #!/usr/bin/env bash
 
-curl -so cfssl https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/darwin/cfssl
-curl -so cfssljson https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/darwin/cfssljson
+kubectl_stable=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-chmod +x cfssl cfssljson
-sudo mv cfssl cfssljson /usr/local/bin/
+path_location="/usr/local/bin/"
+extension=""
+
+if [[ ${os} == "windows" ]]
+then
+    path_location="/usr/bin/"
+    extension=".exe"
+
+    # install sudo for git-bash
+    curl -s https://raw.githubusercontent.com/imachug/win-sudo/master/install.sh | sh &> /dev/null
+    . ~/.bashrc
+fi
+curl -so kubectl "https://storage.googleapis.com/kubernetes-release/release/${kubectl_stable}/bin/${os}/amd64/kubectl${extension}"
+curl -so cfssl "https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_${os}_amd64${extension}"
+curl -so cfssljson "https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssljson_1.4.1_${os}-amd64${extension}"
+chmod +x kubectl cfssl cfssljson
+sudo mv kubectl cfssl cfssljson /usr/bin/
 
 echo "### cfssl version: ###"
 cfssl version
 
 echo "### cfssljson version: ###"
 cfssljson --version
-
-curl -sLO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl"
-chmod +x kubectl
-sudo mv kubectl /usr/local/bin/
 
 echo "### kubectl version: ###"
 kubectl version --client

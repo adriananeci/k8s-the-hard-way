@@ -53,9 +53,12 @@ done
 
 gcloud compute instances list
 
+nc_command="nc"
+command -v ${nc_command} >/dev/null 2>&1 || nc_command="ncat"
+
 #Sleep to wait for controller-0 to come up
 echo "Waiting for controller-0 instance to come up ..."
-while ! nc -z $(gcloud --format="value(networkInterfaces[0].accessConfigs[0].natIP)" compute instances list --filter="name:controller-0") 22  # --filter="name:( controller-0 controller-1 controller-2 worker-0 worker-1 worker-2")
+while ! ${nc_command} -z $(gcloud --format="value(networkInterfaces[0].accessConfigs[0].natIP)" compute instances list --filter="name:controller-0") 22  # --filter="name:( controller-0 controller-1 controller-2 worker-0 worker-1 worker-2")
 do
    sleep 10; echo "Sleeping another 10 seconds ..."
 done

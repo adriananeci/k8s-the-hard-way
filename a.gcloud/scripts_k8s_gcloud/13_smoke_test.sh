@@ -42,4 +42,4 @@ curl -I http://${EXTERNAL_IP}:${NODE_PORT}
 cd .. && kubectl apply -R -f ../k8s_resources/
 
 kubectl get componentstatuses
-kubectl get nodes
+kubectl get nodes -o wide

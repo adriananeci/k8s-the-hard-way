@@ -275,7 +275,7 @@ spec:
     spec:
       containers:
         - name: dashboard-metrics-scraper
-          image: kubernetesui/metrics-scraper:v1.0.1
+          image: kubernetesui/metrics-scraper:v1.0.2
           ports:
             - containerPort: 8000
               protocol: TCP
@@ -305,25 +305,50 @@ spec:
         - name: tmp-volume
           emptyDir: {}
 
+#---
+#apiVersion: networking.k8s.io/v1beta1
+#kind: Ingress
+#metadata:
+#  name: kubernetes-dashboard
+#  namespace: kubernetes-dashboard
+#  annotations:
+#    ingress.kubernetes.io/rewrite-target: /
+##    ingress.kubernetes.io/ssl-passthrough: "true"
+#    ingress.kubernetes.io/secure-backends: "true"
+#spec:
+#  tls:
+#    - hosts:
+#        - k8s.service.consul
+#  rules:
+#    - host: k8s.service.consul
+#      http:
+#        paths:
+#          - path: /dashboard
+#            backend:
+#              serviceName: kubernetes-dashboard
+#              servicePort: 443
+
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: kubernetes-dashboard
-  namespace: kubernetes-dashboard
   annotations:
-    ingress.kubernetes.io/rewrite-target: /
-#    ingress.kubernetes.io/ssl-passthrough: "true"
-    ingress.kubernetes.io/secure-backends: "true"
+    ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.org/ssl-backends: "kubernetes-dashboard"
+    kubernetes.io/ingress.allow-http: "false"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  name: dashboard-ingress
+  namespace: kubernetes-dashboard
 spec:
   tls:
     - hosts:
-        - k8s.service.consul
+        - k8s.local
+#      secretName: kubernetes-dashboard-certs
   rules:
-    - host: k8s.service.consul
+    - host: k8s.local
       http:
         paths:
-          - path: /dashboard
+          - path: /
             backend:
               serviceName: kubernetes-dashboard
               servicePort: 443

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-vagrant up
+vagrant up --parallel
 
 vagrant ssh master -c "echo \"Hello from \$(hostname -s)\""

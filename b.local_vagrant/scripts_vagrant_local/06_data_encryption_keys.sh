@@ -15,5 +15,3 @@ resources:
               secret: ${ENCRYPTION_KEY}
       - identity: {}
 EOF
-
-#vagrant scp encryption-config.yaml master:~/

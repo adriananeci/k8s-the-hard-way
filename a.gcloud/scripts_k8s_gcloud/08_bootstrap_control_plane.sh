@@ -204,10 +204,16 @@ KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-har
     --region $(gcloud config get-value compute/region) \
     --format 'value(address)')
 
+request_path="/healthz"
+if [[ ${os} == "windows" ]]
+then
+    request_path="//healthz"
+fi
+
 gcloud compute http-health-checks create kubernetes \
   --description "Kubernetes Health Check" \
   --host "kubernetes.default.svc.cluster.local" \
-  --request-path "/healthz"
+  --request-path ${request_path}
 
 gcloud compute firewall-rules create kubernetes-the-hard-way-allow-health-check \
   --network kubernetes-the-hard-way \

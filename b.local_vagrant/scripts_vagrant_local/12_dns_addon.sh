@@ -3,7 +3,7 @@
 kubectl config set-context --current --namespace default
 
 #kubectl apply -f https://storage.googleapis.com/kubernetes-the-hard-way/coredns.yaml
-kubectl apply -f ../k8s_resources/coredns.yaml
+kubectl apply -f ../../k8s_resources/coredns.yaml
 
 kubectl get pods -l k8s-app=kube-dns -n kube-system
 

@@ -107,15 +107,3 @@ kubectl config set-context default \
 kubectl config use-context default --kubeconfig=admin.kubeconfig
 
 cd ..
-
-
-#for instance in worker-0 worker-1; do
-#    for file in kubeconfigs/${instance}.kubeconfig kubeconfigs/kube-proxy.kubeconfig; do
-#       vagrant scp ${file} ${instance}:~/
-#    done
-#done
-#
-#for file in kubeconfigs/admin.kubeconfig kubeconfigs/kube-controller-manager.kubeconfig \
-#            kubeconfigs/kube-scheduler.kubeconfig; do
-#    vagrant scp ${file} master:~/
-#done

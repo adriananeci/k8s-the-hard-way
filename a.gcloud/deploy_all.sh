@@ -2,8 +2,20 @@
 
 cd scripts_k8s_gcloud
 
+# Get OS type
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)     machine="linux";;
+    Darwin*)    machine="darwin";;
+    CYGWIN*)    machine="windows";;
+    MINGW*)     machine="windows";;
+    *)          machine="UNKNOWN:${unameOut}" && exit 1
+esac
+
+echo ${machine} && export os=${machine}
+
 #./01_prerequisites.sh
-./02_client_tools.sh
+#./02_client_tools.sh
 ./03_compute_resources.sh
 ./04_certificate_authority.sh
 ./05_k8s_config_files.sh

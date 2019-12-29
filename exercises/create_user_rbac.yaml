@@ -1,0 +1,50 @@
+#openssl genrsa -out adi.key 2048
+#openssl req -new -key adi.key -out adi.csr -subj "/CN=adi/O=devops"
+
+#  cat <<EOF | kubectl apply -f -
+#apiVersion: certificates.k8s.io/v1beta1
+#kind: CertificateSigningRequest
+#metadata:
+#  name: adi.dev
+#spec:
+#  request: $(cat adi.csr | base64 | tr -d '\n')
+#  usages:
+#    - digital signature
+#    - key encipherment
+#    - client auth
+#EOF
+
+#k describe certificatesigningrequests.certificates.k8s.io adi.dev
+#k certificate approve adi.dev
+#k get csr adi.dev -o jsonpath='{.status.certificate}'| base64 --decode > adi.crt
+
+#k config set-credentials adi --client-certificate=adi.crt --client-key=adi.key --embed-certs
+#k config set-context adi-context --cluster=kubernetes-the-hard-way --namespace=dev --user=adi
+
+# k config use-context adi-context
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  namespace: dev
+  name: deployment-manager
+rules:
+  - apiGroups: ["", "extensions", "apps"]
+    resources: ["deployments", "replicasets", "pods"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: deployment-manager-binding
+  namespace: dev
+subjects:
+  - kind: User
+    name: john
+    apiGroup: "rbac.authorization.k8s.io"
+roleRef:
+  kind: Role
+  name: deployment-manager
+  apiGroup: "rbac.authorization.k8s.io"

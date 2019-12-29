@@ -1,4 +1,5 @@
 .idea
 certs
 kubeconfigs
+encryption-config.yaml
 .vagrant

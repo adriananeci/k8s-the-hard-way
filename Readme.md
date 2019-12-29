@@ -1,7 +1,19 @@
 # K8S the hard way based on [kelsey hightower repo](https://github.com/kelseyhightower/kubernetes-the-hard-way)
 
+## K8s cluster can be deployed in 2 ways:
+### a. using google cloud
+```
+cd a.gcloud
+```
 All resources are deployed in google cloud. You can create a free account and get a 300$ for free.
-These money should be enough to get accommodated with main k8s components 
+These money should be enough to get accommodated with main k8s components.
+Deploy script will spin up 6 VMs, 3 masters and 3 worker nodes. 
+
+### b. locally, using vagrant
+```
+cd b.local_vagrant
+```
+Deploy script will spin up 3 VMs, 1 master and 2 worker nodes. 
 
 ## Quick setup
 ```
@@ -172,5 +184,5 @@ http://kubernetesbyexample.com/
 http://crunchtools.com/competition-heats-up-between-cri-o-and-containerd-actually-thats-not-a-thing/
 https://itnext.io/benchmark-results-of-kubernetes-network-plugins-cni-over-10gbit-s-network-updated-april-2019-4a9886efe9c4
 
-### TODO - add more options to deploy k8s (maybe aws, vagrant or bare-metal)
+### TODO - add more options to deploy k8s (maybe aws)
 

@@ -14,6 +14,11 @@ esac
 
 echo ${machine} && export os=${machine}
 
+if [[ ${os} != "windows" ]]
+then
+    find . -type f -exec sed -i '' -e 's/\\"/"/g; s/\\\\/\\/g' {} \;
+fi
+
 ./01_prerequisites.sh
 ./02_client_tools.sh
 ./03_compute_resources.sh

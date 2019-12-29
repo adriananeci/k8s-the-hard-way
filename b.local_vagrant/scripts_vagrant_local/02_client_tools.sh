@@ -14,11 +14,11 @@ then
     curl -s https://raw.githubusercontent.com/imachug/win-sudo/master/install.sh | sh &> /dev/null
     . ~/.bashrc
 fi
-curl -so kubectl "https://storage.googleapis.com/kubernetes-release/release/${kubectl_stable}/bin/${os}/amd64/kubectl${extension}"
-curl -so cfssl "https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_${os}_amd64${extension}"
-curl -so cfssljson "https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssljson_1.4.1_${os}-amd64${extension}"
+curl -Lso kubectl "https://storage.googleapis.com/kubernetes-release/release/${kubectl_stable}/bin/${os}/amd64/kubectl${extension}"
+curl -Lso cfssl "https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_${os}_amd64${extension}"
+curl -Lso cfssljson "https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssljson_1.4.1_${os}_amd64${extension}"
 chmod +x kubectl cfssl cfssljson
-sudo mv kubectl cfssl cfssljson /usr/bin/
+sudo mv kubectl cfssl cfssljson ${path_location}
 
 echo "### cfssl version: ###"
 cfssl version

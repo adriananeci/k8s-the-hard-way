@@ -2,4 +2,4 @@
 
 vagrant up --parallel
 
-vagrant ssh master -c "echo \"Hello from \$(hostname -s)\""
+vagrant ssh master -c "echo 'Hello from' \$(hostname -s)"

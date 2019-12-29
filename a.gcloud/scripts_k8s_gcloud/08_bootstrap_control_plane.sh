@@ -130,7 +130,7 @@ sudo systemctl enable kube-apiserver kube-controller-manager kube-scheduler
 sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
 
 sudo apt-get -qq update
-sudo apt-get -qq install -y nginx
+sudo apt-get -qq install -y nginx > /dev/null
 
 cat > kubernetes.default.svc.cluster.local <<EOF
 server {
@@ -151,7 +151,7 @@ sudo ln -s /etc/nginx/sites-available/kubernetes.default.svc.cluster.local /etc/
 sudo systemctl restart nginx
 sudo systemctl enable nginx
 kubectl get componentstatuses --kubeconfig admin.kubeconfig
-curl -H "Host: kubernetes.default.svc.cluster.local" -i http://127.0.0.1/healthz
+curl -s -H "Host: kubernetes.default.svc.cluster.local" -i http://127.0.0.1/healthz
 '''
 
 gcp_ssh controller-0 '''
@@ -232,4 +232,4 @@ gcloud compute forwarding-rules create kubernetes-forwarding-rule \
   --region $(gcloud config get-value compute/region) \
   --target-pool kubernetes-target-pool
 
-curl --cacert certs/ca.pem https://${KUBERNETES_PUBLIC_ADDRESS}:6443/version
+curl -s --cacert certs/ca.pem https://${KUBERNETES_PUBLIC_ADDRESS}:6443/version

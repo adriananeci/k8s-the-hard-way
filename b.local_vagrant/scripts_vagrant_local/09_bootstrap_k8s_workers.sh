@@ -3,7 +3,7 @@
 for instance in worker-0 worker-1; do
     vagrant ssh  ${instance} -c '''
 sudo apt-get -qq update
-sudo apt-get -y -qq install socat conntrack ipset
+sudo apt-get -y -qq install socat conntrack ipset > /dev/null
 sudo swapoff -a
 
 wget -q --https-only --timestamping \\
@@ -25,9 +25,9 @@ sudo mkdir -p \\
   /etc/containerd
 
 mkdir containerd
-tar -xvf crictl-v1.16.1-linux-amd64.tar.gz
-tar -xvf containerd-1.3.2.linux-amd64.tar.gz -C containerd
-sudo tar -xvf cni-plugins-linux-amd64-v0.8.3.tgz -C /opt/cni/bin/
+tar -zxf crictl-v1.16.1-linux-amd64.tar.gz
+tar -zxf containerd-1.3.2.linux-amd64.tar.gz -C containerd
+sudo tar -zxf cni-plugins-linux-amd64-v0.8.3.tgz -C /opt/cni/bin/
 sudo mv runc.amd64 runc
 chmod +x crictl kubectl kube-proxy kubelet runc
 sudo mv crictl kubectl kube-proxy kubelet runc /usr/local/bin/

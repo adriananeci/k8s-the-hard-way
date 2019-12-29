@@ -128,7 +128,7 @@ sudo systemctl enable kube-apiserver kube-controller-manager kube-scheduler
 sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
 
 sudo apt-get -qq update
-sudo apt-get -qq install -y nginx
+sudo apt-get -qq install -y nginx > /dev/null
 
 cat > kubernetes.default.svc.cluster.local <<EOF
 server {
@@ -198,4 +198,4 @@ EOF
 
 KUBERNETES_PUBLIC_ADDRESS=$(vagrant ssh master -c "ip address show | grep 'inet 10.240' | sed -e 's/^.*inet //' -e 's/\/.*$//'| tr -d '\n'" 2>/dev/null)
 
-curl --cacert certs/ca.pem https://${KUBERNETES_PUBLIC_ADDRESS}:6443/version
+curl -s --cacert certs/ca.pem https://${KUBERNETES_PUBLIC_ADDRESS}:6443/version

@@ -1,6 +1,6 @@
 # K8S the hard way based on [kelsey hightower repo](https://github.com/kelseyhightower/kubernetes-the-hard-way)
 
-## K8s cluster can be deployed in 2 ways:
+## K8s cluster can be deployed in 2 ways (tested on Windows and MacOS but should work also on Linux):
 ### a. using google cloud
 ```
 cd a.gcloud
@@ -8,12 +8,13 @@ cd a.gcloud
 All resources are deployed in google cloud. You can create a free account and get a 300$ for free.
 These money should be enough to get accommodated with main k8s components.
 Deploy script will spin up 6 VMs, 3 masters and 3 worker nodes. 
-
+You have to install [gcloud](https://cloud.google.com/sdk/install) prior to run deploy script
 ### b. locally, using vagrant
 ```
 cd b.local_vagrant
 ```
-Deploy script will spin up 3 VMs, 1 master and 2 worker nodes. 
+Deploy script will spin up 3 VMs, 1 master and 2 worker nodes.
+You have to install [vagrant](https://www.vagrantup.com/downloads.html) and [virtualBox](https://www.virtualbox.org/wiki/Downloads) (and also [git-bash](https://git-scm.com/downloads) in case of windows OS) prior to run deploy script
 
 ## Quick setup
 ```

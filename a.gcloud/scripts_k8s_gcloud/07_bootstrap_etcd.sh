@@ -7,7 +7,7 @@ gcp_ssh_multiple controller-0,controller-1,controller-2 '''
 wget -q --https-only --timestamping \
   "https://github.com/etcd-io/etcd/releases/download/v3.4.3/etcd-v3.4.3-linux-amd64.tar.gz"
 
-tar -xvf etcd-v3.4.3-linux-amd64.tar.gz
+tar -zxf etcd-v3.4.3-linux-amd64.tar.gz
 sudo mv etcd-v3.4.3-linux-amd64/etcd* /usr/local/bin/
 sudo mkdir -p /etc/etcd /var/lib/etcd
 sudo cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/

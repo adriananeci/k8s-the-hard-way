@@ -12,7 +12,7 @@ then
 
     # install sudo for git-bash
     curl -s https://raw.githubusercontent.com/imachug/win-sudo/master/install.sh | sh &> /dev/null
-    . ~/.bashrc
+    [[ -f ~/bin/win-sudo/s/path.sh ]] && source ~/bin/win-sudo/s/path.sh
 fi
 curl -Lso kubectl "https://storage.googleapis.com/kubernetes-release/release/${kubectl_stable}/bin/${os}/amd64/kubectl${extension}"
 curl -Lso cfssl "https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_${os}_amd64${extension}"

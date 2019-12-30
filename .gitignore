@@ -1,5 +1,7 @@
 .idea
+.vagrant
 certs
 kubeconfigs
 encryption-config.yaml
-.vagrant
+kubeadmin_init
+kubeconfig

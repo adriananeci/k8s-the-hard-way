@@ -33,7 +33,7 @@ spec:
         args:
           - --cert-dir=/tmp
           - --secure-port=4443
-#          - --kubelet-insecure-tls
+          - --kubelet-insecure-tls
           - --kubelet-preferred-address-types=InternalIP
         ports:
         - name: main-port
@@ -49,4 +49,4 @@ spec:
           mountPath: /tmp
       nodeSelector:
         beta.kubernetes.io/os: linux
-      hostNetwork: true
+      #hostNetwork: true

@@ -149,6 +149,10 @@ kubectl run --generator=job/v1 test --image=nginx --dry-run -o yaml
 ```
 kubectl get pod --all-namespaces  -o json | jq  '.items[] | select(.status.phase!="Running") | [ .metadata.namespace,.metadata.name,.status.phase ] | join(":")'
 ```
+* List all pods order by MEM usage
+```
+kubectl top pods --no-headers -A | sort --reverse --numeric -k 4
+```
 * List the top 3 nodes with the highest CPU usage
 ```
 kubectl top nodes | sort --reverse --numeric -k 3 | head -n3

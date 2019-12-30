@@ -54,7 +54,9 @@ data:
   Corefile: |
     .:53 {
         errors
-        health
+        health {
+           lameduck 5s
+        }
         ready
         kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
@@ -99,7 +101,7 @@ spec:
         beta.kubernetes.io/os: linux
       containers:
         - name: coredns
-          image: coredns/coredns:1.6.2
+          image: coredns/coredns:1.6.6
           imagePullPolicy: IfNotPresent
           resources:
             limits:

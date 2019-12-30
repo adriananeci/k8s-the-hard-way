@@ -17,7 +17,7 @@ chmod +x add_routes.sh
 #write out current crontab
 crontab -l > mycron
 #echo new cron into cron file
-echo \"@reboot ~/add_routes.sh\" >> mycron
+echo \"@reboot /home/vagrant/add_routes.sh\" >> mycron
 #install new cron file
 crontab mycron
 rm mycron
@@ -42,7 +42,7 @@ chmod +x add_routes.sh
 #write out current crontab
 crontab -l > mycron
 #echo new cron into cron file
-echo \"@reboot ~/add_routes.sh\" >> mycron
+echo \"@reboot /home/vagrant/add_routes.sh\" >> mycron
 #install new cron file
 crontab mycron
 rm mycron
@@ -67,7 +67,7 @@ chmod +x add_routes.sh
 #write out current crontab
 crontab -l > mycron
 #echo new cron into cron file
-echo \"@reboot ~/add_routes.sh\" >> mycron
+echo \"@reboot /home/vagrant/add_routes.sh\" >> mycron
 #install new cron file
 crontab mycron
 rm mycron

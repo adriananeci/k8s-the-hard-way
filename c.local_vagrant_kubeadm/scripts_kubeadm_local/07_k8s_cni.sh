@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 
-export KUBECONFIG=kubeconfig
+config_separator=":"
+if [[ ${os} == "windows" ]]
+then
+    config_separator=";"
+fi
+
+export KUBECONFIG="~/.kube/config${config_separator}./kubeconfig"
+kubectl config view --flatten > ~/.kube/config
+
+kubectl config use-context 'kubernetes-admin@kubernetes'
 
 nc_command="nc"
 command -v ${nc_command} >/dev/null 2>&1 || nc_command="ncat"

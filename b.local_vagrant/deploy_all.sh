@@ -5,7 +5,7 @@ cd scripts_vagrant_local
 # Get OS type
 function get_os()
 {
-unameOut="$(uname -s)"
+    unameOut="$(uname -s)"
     case "${unameOut}" in
         Linux*)     machine="linux";;
         Darwin*)    machine="darwin";;
@@ -35,6 +35,11 @@ function box_out()
 }
 
 get_os
+
+if [[ ${os} != "windows" ]]
+then
+    find . -type f -exec sed -i '' -e 's/\\"/"/g; s/\\\\/\\/g' {} \;
+fi
 
 box_out "01_prerequisites"
 ./01_prerequisites.sh

@@ -5,7 +5,7 @@ cd scripts_k8s_gcloud
 # Get OS type
 function get_os()
 {
-unameOut="$(uname -s)"
+    unameOut="$(uname -s)"
     case "${unameOut}" in
         Linux*)     machine="linux";;
         Darwin*)    machine="darwin";;

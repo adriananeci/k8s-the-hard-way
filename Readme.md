@@ -183,10 +183,13 @@ kubectl get nodes -o json | jq  -r '.items[] | select(.spec.taints == null) | "\
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
 https://matthewdavis.io/kubectl-most-useful-commands-a-growing-list/
+
 https://github.com/dennyzhang/cheatsheet-kubernetes-A4
+
 http://kubernetesbyexample.com/
 
 http://crunchtools.com/competition-heats-up-between-cri-o-and-containerd-actually-thats-not-a-thing/
+
 https://itnext.io/benchmark-results-of-kubernetes-network-plugins-cni-over-10gbit-s-network-updated-april-2019-4a9886efe9c4
 
 ### TODO - add more options to deploy k8s (maybe aws)

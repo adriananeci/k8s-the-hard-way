@@ -7,3 +7,4 @@ encryption-config.yaml
 kubeadmin_init
 kubeconfig
  *.log
+*console.log

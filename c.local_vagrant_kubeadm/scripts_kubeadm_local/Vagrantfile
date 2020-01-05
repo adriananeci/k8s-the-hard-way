@@ -35,11 +35,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.customize [
                          "modifyvm", :id,
                          "--memory", info[:mem],
-                         "--cpus", info[:cpus],
-                         "--hwvirtex", "on",
-                         "--uartmode1", "disconnected",
-                         # "--nested-hw-virt", "on",
-                         "--ioapic", "on"
+                         "--cpus", info[:cpus]
+                         #"--hwvirtex", "on",
+                         #"--uartmode1", "disconnected",
+                         ## "--nested-hw-virt", "on",
+                         #"--ioapic", "on"
                      ]
       end # end provider
     end # end config

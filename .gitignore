@@ -1,7 +1,9 @@
 .idea
+.vscode
 .vagrant
 certs
 kubeconfigs
 encryption-config.yaml
 kubeadmin_init
 kubeconfig
+ *.log

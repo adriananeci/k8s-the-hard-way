@@ -31,15 +31,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           override.vm.provision :shell, :inline => "echo '10.200.#{index}.0/24' > /home/vagrant/pod-cidr"
         end
 
-        vb.name = hostname
+        vb.name = "#{hostname}-local"
         vb.customize [
                          "modifyvm", :id,
                          "--memory", info[:mem],
                          "--cpus", info[:cpus],
-                         "--hwvirtex", "on",
-                         "--uartmode1", "disconnected",
-                         # "--nested-hw-virt", "on",
-                         "--ioapic", "on"
+                         #"--hwvirtex", "on",
+                         #"--uartmode1", "disconnected",
+                         ## "--nested-hw-virt", "on",
+                         #"--ioapic", "on"
                      ]
       end # end provider
     end # end config

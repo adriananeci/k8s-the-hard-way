@@ -1,0 +1,75 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cka-server
+  namespace: default
+  labels:
+    k8s-app: cka-lab
+spec:
+  selector:
+    matchLabels:
+      k8s-app: cka-lab
+  template:
+    metadata:
+      name: cka-lab
+      labels:
+        k8s-app: cka-lab
+    spec:
+      nodeSelector:
+         kubernetes.io/hostname: 'worker-0'
+      containers:
+      - name: gateone
+        image: satomic/gateone:http
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: main-port
+          containerPort: 8000
+          protocol: TCP
+        resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: 100m
+              memory: 200Mi
+      - name: cka-lab
+        image: satomic/cka_lab
+        command:
+          - /opt/entry.bash
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: GATEONE_HTTP_SERVER
+            value: "10.240.0.20:30081"
+        ports:
+        - name: http-port
+          containerPort: 80
+          protocol: TCP
+          hostPort: 80
+        resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: 100m
+              memory: 200Mi
+      hostNetwork: true
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateone
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    k8s-app: cka-lab
+  ports:
+    - name: gate
+      port: 8081
+      nodePort: 30081
+      targetPort: 8000
+
+
+#k cp C:\\Users\\Adi\\.kube\\config cka-server-6665bf9444-p7twk:/root/.kube/config -c gateone -v=9

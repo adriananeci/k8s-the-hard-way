@@ -26,7 +26,7 @@ SCRIPT
 
 $master_routes = <<-SCRIPT
 echo 'add services IP subnet in route table'
-ip route add 10.32.0.0/24 via 10.240.0.20
+ip route add 172.16.11.0/24 via 10.240.0.20
 echo 'Done'
 SCRIPT
 
@@ -41,7 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         override.vm.hostname = hostname
 
         if hostname.include? "worker"
-          override.vm.provision "pod_cidr", type: "shell", inline: "echo '10.200.#{index}.0/24' > /home/vagrant/pod-cidr && ip route del 10.200.#{index}.0/24"
+          override.vm.provision "pod_cidr", type: "shell", inline: "echo '10.200.#{index}.0/24' > /home/vagrant/pod-cidr && ip r l | grep 10.200.#{index}.0 && ip route del 10.200.#{index}.0/24 || echo 'Route not present'"
         else
           override.vm.provision "services_routes", type: "shell", inline: $master_routes, run: "always"
         end

@@ -96,8 +96,8 @@ k create role test-role --verb=get --verb=list --resource=services
 k create rolebinding test-rb --role=test-role --serviceaccount=test:test
 
 k run test --image=ubuntu --serviceaccount=test -it -- bash
-curl -k https://10.32.0.1/api/v1/namespaces/test/services -H 'Accept: application/json' -H "Authorization: Bearer $(cat /run/secrets/kubernetes.io/serviceaccount/token)" --works
-curl -k https://10.32.0.1/api/v1/namespaces/test/pods -H 'Accept: application/json' -H "Authorization: Bearer $(cat /run/secrets/kubernetes.io/serviceaccount/tokn)" --forbidden
+curl -k https://172.16.11.1/api/v1/namespaces/test/services -H 'Accept: application/json' -H "Authorization: Bearer $(cat /run/secrets/kubernetes.io/serviceaccount/token)" --works
+curl -k https://172.16.11.1/api/v1/namespaces/test/pods -H 'Accept: application/json' -H "Authorization: Bearer $(cat /run/secrets/kubernetes.io/serviceaccount/tokn)" --forbidden
 
 k delete deploy test
 ```

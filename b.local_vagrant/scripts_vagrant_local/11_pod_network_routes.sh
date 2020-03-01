@@ -9,3 +9,5 @@ for instance in master worker-0 worker-1; do
 EOF
 '''
 done
+
+kubectl apply -f ../../cni/calico/calico.yaml

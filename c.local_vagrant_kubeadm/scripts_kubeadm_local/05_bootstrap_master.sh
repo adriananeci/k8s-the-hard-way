@@ -10,7 +10,7 @@ KUBELET_EXTRA_ARGS=--node-ip=${INTERNAL_IP}
 EOF
 
 sudo kubeadm init --apiserver-advertise-address ${INTERNAL_IP} --pod-network-cidr 10.200.0.0/16  \\
-     --service-cidr 10.32.0.0/24 --apiserver-cert-extra-sans \\
+     --service-cidr 172.16.11.0/24 --apiserver-cert-extra-sans \\
      k8s.local,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local \
      > /vagrant/kubeadmin_init
 

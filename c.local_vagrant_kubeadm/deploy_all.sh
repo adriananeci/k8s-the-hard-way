@@ -38,7 +38,8 @@ get_os
 
 if [[ ${os} != "windows" ]]
 then
-    find . -type f -exec sed -i '' -e 's/\\"/"/g; s/\\\\/\\/g' {} \;
+    find . -type f -exec sed -i '' -e 's/\\"/"/g; s/\\\\/\\/g; #\\//#\\\\//#g' {} \;
+    #find . -type f -exec sed -i '' -e 's#\\//#\\\\//#g' {} \;
 fi
 
 box_out "02_client_tools"

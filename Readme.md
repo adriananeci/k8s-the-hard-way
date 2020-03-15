@@ -178,7 +178,8 @@ kubectl get nodes --no-headers | awk '{print $1}' | xargs -I {} sh -c 'echo {}; 
 ```
 kubectl get nodes -o json | jq  -r '.items[] | select(.spec.taints == null) | "\(.metadata.name)"'
 ```
-
+### What happens when running kubectl
+[WhatHappensWhenKubectl](WhatHappensWhenKubectl.md)
 ### Other useful links
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 

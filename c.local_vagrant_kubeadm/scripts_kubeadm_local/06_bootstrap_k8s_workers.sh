@@ -18,6 +18,8 @@ while [[ \"${cluster_join}\" == \"\" ]] ; do
 done
 
 sudo $cluster_join
+
+apt-get install nfs-common -y
 '''
 done
 

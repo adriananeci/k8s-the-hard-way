@@ -20,4 +20,14 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config && \\
 cp $HOME/.kube/config /vagrant/kubeconfig
 
 kubectl get nodes -o wide
+
+apt install nfs-kernel-server -y &&\
+mkdir -p /mnt/sharedfolder && \
+chown nobody:nogroup /mnt/sharedfolder &&\
+chmod 777 /mnt/sharedfolder
+
+echo "/mnt/sharedfolder 10.240.0.0/24(rw,sync,no_subtree_check)" >>/etc/exports
+exportfs -a
+systemctl restart nfs-kernel-server
+
 '''

@@ -1,4 +1,6 @@
 # K8S the hard way based on [kelsey hightower repo](https://github.com/kelseyhightower/kubernetes-the-hard-way)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fadriananeci%2Fk8s-the-hard-way.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fadriananeci%2Fk8s-the-hard-way?ref=badge_shield)
+
 
 ## K8s cluster can be deployed in 2 ways (tested on Windows and MacOS but should work also on Linux):
 ### a. using google cloud
@@ -195,3 +197,7 @@ https://itnext.io/benchmark-results-of-kubernetes-network-plugins-cni-over-10gbi
 
 ### TODO - add more options to deploy k8s (maybe aws)
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fadriananeci%2Fk8s-the-hard-way.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fadriananeci%2Fk8s-the-hard-way?ref=badge_large)

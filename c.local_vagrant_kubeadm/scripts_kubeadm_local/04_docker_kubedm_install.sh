@@ -8,9 +8,11 @@ function prepare_docker()
     apt-get update -qq && apt-get upgrade -qq > /dev/null
     apt-get install -qq apt-transport-https ca-certificates curl gnupg-agent software-properties-common > /dev/null
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+    #TODO remove bionic with lsb_release after focal(ubuntu 20.04) docker repo is available
     add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-       $(lsb_release -cs) \
-       stable\"
+        bionic \
+        stable\"
+        # $(lsb_release -cs) \
     apt-get update -qq
     apt-get install -qq docker-ce > /dev/null
 

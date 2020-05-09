@@ -40,7 +40,7 @@ box_out "01_prerequisites"
 ./01_prerequisites.sh
 
 box_out "02_client_tools"
-./02_client_tools.sh
+./../common/02_client_tools.sh
 
 box_out "03_compute_resources"
 ./03_compute_resources.sh

@@ -21,7 +21,17 @@ INTERNAL_IP=$(vagrant ssh worker-0 -c "ip address show | grep 'inet 10.240' | se
 
 curl -s -I http://${INTERNAL_IP}:${NODE_PORT}
 
-kubectl apply -R -f ../../k8s_resources/
+#kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/baremetal/deploy.yaml
+kubectl create ns ingress-nginx
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx \
+    --set controller.service.type=NodePort \
+    --set controller.service.nodePorts.https=30443 \
+    --set controller.service.nodePorts.http=30080 \
+    --set controller.service.nodePorts.tcp.8080=38080
+
+# create k8s resources
+./../../k8s_resources/apply_all.sh
 
 kubectl get componentstatuses
 kubectl get nodes -o wide

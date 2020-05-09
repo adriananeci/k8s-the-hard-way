@@ -1,6 +1,9 @@
 # K8S the hard way based on [kelsey hightower repo](https://github.com/kelseyhightower/kubernetes-the-hard-way)
 
 ## K8s cluster can be deployed in 2 ways (tested on Windows and MacOS but should work also on Linux):
+### Prerequisites
+[go 1.13](https://golang.org/doc/install) or later
+
 ### a. using google cloud
 ```
 cd a.gcloud
@@ -22,6 +25,19 @@ You have to install [vagrant](https://www.vagrantup.com/downloads.html) and [vir
 ```
 
 ## Quick view
+add below line in `/etc/hosts`
+```bash
+10.240.0.10 k8s.local grafana.k8s.local prometheus.k8s.local alaertmanager.k8s.local
+```
+`Grafana` should be available at https://grafana.k8s.local:30443
+
+`Prometheus` should be available at https://prometheus.k8s.local:30443
+
+`Alertmanager` should be available at https://alertmanager.k8s.local:30443
+
+`K8S dashboard` should be available at https://k8s.local:30443/dashboard/
+
+An alternative for accessing `k8s dashboard` will by using k8s proxy
 In order to access k8s dashboard run 
 ```
 kubectl proxy

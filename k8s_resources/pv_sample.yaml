@@ -26,6 +26,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: myclaim
+  namespace: default
 spec:
   accessModes:
     - ReadWriteMany
@@ -44,6 +45,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pod-with-pvc
+  namespace: default
 spec:
   containers:
     - name: pvc

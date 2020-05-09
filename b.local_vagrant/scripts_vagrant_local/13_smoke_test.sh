@@ -33,7 +33,8 @@ INTERNAL_IP=$(vagrant ssh worker-0 -c "ip address show | grep 'inet 10.240' | se
 
 curl -s -I http://${INTERNAL_IP}:${NODE_PORT}
 
-cd .. && kubectl apply -R -f ../k8s_resources/
+# create k8s resources
+./../../k8s_resources/apply_all.sh
 
 kubectl get componentstatuses
 kubectl get nodes -o wide

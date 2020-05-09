@@ -14,8 +14,8 @@ required_plugins.each do |plugin|
 end
 
 cluster = {
-    "worker-0" => { :ip => "10.240.0.20", :cpus => 2, :mem => 1024 },
-    "worker-1" => { :ip => "10.240.0.21", :cpus => 2, :mem => 1024 },
+    "worker-0" => { :ip => "10.240.0.20", :cpus => 2, :mem => 2048 },
+    "worker-1" => { :ip => "10.240.0.21", :cpus => 2, :mem => 2048 },
     "master" => { :ip => "10.240.0.10", :cpus => 4, :mem => 2048 },
 }
 

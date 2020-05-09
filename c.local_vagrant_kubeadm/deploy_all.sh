@@ -44,7 +44,7 @@ then
 fi
 
 #box_out "02_client_tools"
-#./02_client_tools.sh || exit 1
+./../common/02_client_tools.sh || exit 1
 
 box_out "03_compute_resources"
 ./03_compute_resources.sh || exit 1
@@ -64,5 +64,3 @@ box_out "07_k8s_cni"
 box_out "08_smoke_test"
 ./08_smoke_test.sh || exit 1
 
-box_out "09_monitoring_stack"
-./09_monitoring_stack.sh || exit 1

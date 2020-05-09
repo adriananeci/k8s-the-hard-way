@@ -39,7 +39,8 @@ EXTERNAL_IP=$(gcloud compute instances describe worker-0 \
 
 curl -s -I http://${EXTERNAL_IP}:${NODE_PORT}
 
-cd .. && kubectl apply -R -f ../k8s_resources/
+# create k8s resources
+./../../k8s_resources/apply_all.sh
 
 kubectl get componentstatuses
 kubectl get nodes -o wide

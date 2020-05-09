@@ -43,8 +43,8 @@ then
     touch "../.replaced_slashes"
 fi
 
-#box_out "02_client_tools"
-./../common/02_client_tools.sh || exit 1
+box_out "02_client_tools"
+../../common/02_client_tools.sh || exit 1
 
 box_out "03_compute_resources"
 ./03_compute_resources.sh || exit 1

@@ -19,7 +19,7 @@ done
 
 sudo $cluster_join
 
-apt-get install nfs-common -y
+sudo apt-get install nfs-common -y
 '''
 done
 

@@ -13,8 +13,8 @@ if ! git clone https://github.com/coreos/kube-prometheus.git; then
 fi
 
 # Create the namespace and CRDs, and then wait for them to be available before creating the remaining resources
-kubectl create -f manifests/setup
+kubectl create -f kube-prometheus/manifests/setup
 until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
-kubectl create -f manifests/
+kubectl create -f kube-prometheus/manifests/
 
 popd || exit 1

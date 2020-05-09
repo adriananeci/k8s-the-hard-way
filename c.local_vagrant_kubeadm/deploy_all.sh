@@ -36,10 +36,11 @@ function box_out()
 
 get_os
 
-if [[ ${os} != "windows" ]]
+if [[ ${os} != "windows" && ! -f "../.replaced_slashes" ]]
 then
     find . -type f -exec sed -i '' -e 's/\\"/"/g; s/\\\\/\\/g; #\\//#\\\\//#g' {} \;
     #find . -type f -exec sed -i '' -e 's#\\//#\\\\//#g' {} \;
+    touch "../.replaced_slashes"
 fi
 
 #box_out "02_client_tools"

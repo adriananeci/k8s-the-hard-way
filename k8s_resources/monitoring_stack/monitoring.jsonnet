@@ -1,8 +1,8 @@
 local kp =
   (import 'kube-prometheus/kube-prometheus.libsonnet') +
   (import 'kube-prometheus/kube-prometheus-kubeadm.libsonnet') +
-  (import 'kube-prometheus/kube-prometheus-thanos-sidecar.libsonnet') +
   (import 'kube-prometheus/kube-prometheus-custom-metrics.libsonnet') +
+  #(import 'kube-prometheus/kube-prometheus-thanos-sidecar.libsonnet') +
   {
     _config+:: {
       namespace: 'monitoring',

@@ -8,3 +8,7 @@ kubeadmin_init
 kubeconfig
  *.log
 *console.log
+cfssl
+cfssljson
+kubectl
+.replaced_slashes
